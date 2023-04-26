@@ -4,6 +4,7 @@ import {
   TMDB_API_KEY,
   TMDB_IMAGE_BASE_URL,
   ENDPOINTS,
+  YOUTUBE_BASE_URL,
 } from "../constants/Urls";
 import LANGUAGES from "../constants/Languages";
 
@@ -55,6 +56,8 @@ const getPoster = (path) => `${TMDB_IMAGE_BASE_URL}/original${path}`;
 const getLanguage = (language_iso) =>
   LANGUAGES.find((language) => language.iso_639_1 === language_iso);
 
+const getVideo = (key) => `${YOUTUBE_BASE_URL}?v=${key}`;
+
 export {
   getNowPlayingMovies,
   getUpcomingMovies,
@@ -62,4 +65,5 @@ export {
   getMovieById,
   getPoster,
   getLanguage,
+  getVideo,
 };

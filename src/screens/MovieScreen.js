@@ -14,7 +14,12 @@ import {
 } from "react-native";
 import COLORS from "../constants/Colors";
 import FONTS from "../constants/Fonts";
-import { getMovieById, getPoster, getLanguage } from "../services/MovieService";
+import {
+  getMovieById,
+  getPoster,
+  getLanguage,
+  getVideo,
+} from "../services/MovieService";
 import ItemSeparator from "../components/ItemSeparator";
 import MovieCard from "../components/MovieCard";
 import { LinearGradient } from "expo-linear-gradient";
@@ -60,25 +65,22 @@ const MovieScreen = ({ route, navigation }) => {
         >
           <Feather name="chevron-left" size={35} color={COLORS.WHITE} />
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() =>
-            Share.share({ message: `${movie?.title}\n\n${movie?.homepage}` })
-          }
-        >
-          <Text style={styles.headerText}>Share</Text>/
-        </TouchableOpacity> */}
       </View>
-      {/* <TouchableOpacity        style={styles.playButton}
+      <TouchableOpacity
+        style={styles.playButton}
         onPress={() => Linking.openURL(getVideo(movie.videos.results[0].key))}
       >
-        <Ionicons name="play-circle-outline" size={70} color={COLORS.WHITE} />
-      </TouchableOpacity> */}
+        <Ionicons name="play-circle" size={70} color={COLORS.WHITE} />
+      </TouchableOpacity>
       <ItemSeparator height={setHeight(37)} />
       <View style={styles.movieTitleContainer}>
         <Text style={styles.movieTitle} numberOfLines={2}>
           {movie?.original_title}
         </Text>
+        <View style={styles.row}>
+          <Ionicons name="heart" size={22} color={COLORS.HEART} />
+          <Text style={styles.ratingText}>{movie?.vote_average}</Text>
+        </View>
       </View>
       <Text style={styles.genreText}>
         {movie?.genres?.map((genre) => genre?.name)?.join(", ")} |{" "}
@@ -91,96 +93,6 @@ const MovieScreen = ({ route, navigation }) => {
         <Text style={styles.overviewTitle}>Overview</Text>
         <Text style={styles.overviewText}>{movie?.overview}</Text>
       </View>
-      <View>
-        {/* <Text style={styles.castTitle}>Cast</Text>
-        <View style={styles.castSubMenuContainer}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => setIsCastSelected(true)}
-          >
-            <Text
-              style={{
-                ...styles.castSubMenuText,
-                color: isCastSelected ? COLORS.BLACK : COLORS.LIGHT_GRAY,
-              }}
-            >
-              Cast
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => setIsCastSelected(false)}
-          >
-            <Text
-              style={{
-                ...styles.castSubMenuText,
-                color: isCastSelected ? COLORS.LIGHT_GRAY : COLORS.BLACK,
-              }}
-            >
-              Crew
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <FlatList
-          style={{ marginVertical: 5 }}
-          data={isCastSelected ? movie?.credits?.cast : movie?.credits?.crew}
-          keyExtractor={(item) => item?.credit_id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          ListHeaderComponent={() => <ItemSeparator width={20} />}
-          ItemSeparatorComponent={() => <ItemSeparator width={20} />}
-          ListFooterComponent={() => <ItemSeparator width={20} />}
-          renderItem={({ item }) => (
-            <CastCard
-              originalName={item?.name}
-              characterName={isCastSelected ? item?.character : item?.job}
-              image={item?.profile_path}
-            />
-          )}
-        /> */}
-      </View>
-      {/* <Text style={styles.extraListTitle}>Recommended Movies</Text>
-      <FlatList
-        data={movie?.recommendations?.results}
-        keyExtractor={(item) => item?.id?.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        ListHeaderComponent={() => <ItemSeparator width={20} />}
-        ItemSeparatorComponent={() => <ItemSeparator width={20} />}
-        ListFooterComponent={() => <ItemSeparator width={20} />}
-        renderItem={({ item }) => (
-          <MovieCard
-            title={item.title}
-            language={item.original_language}
-            voteAverage={item.vote_average}
-            voteCount={item.vote_count}
-            poster={item.poster_path}
-            size={0.6}
-            onPress={() => navigation.navigate("movie", { movieId: item.id })}
-          />
-        )}
-      /> */}
-      {/* <Text style={styles.extraListTitle}>Similar Movies</Text>
-      <FlatList
-        data={movie?.similar?.results}
-        keyExtractor={(item) => item?.id?.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        ListHeaderComponent={() => <ItemSeparator width={20} />}
-        ItemSeparatorComponent={() => <ItemSeparator width={20} />}
-        ListFooterComponent={() => <ItemSeparator width={20} />}
-        renderItem={({ item }) => (
-          <MovieCard
-            title={item.title}
-            language={item.original_language}
-            voteAverage={item.vote_average}
-            voteCount={item.vote_count}
-            poster={item.poster_path}
-            size={0.6}
-            onPress={() => navigation.navigate("movie", { movieId: item.id })}
-          />
-        )}
-      /> */}
     </ScrollView>
   );
 };
@@ -202,8 +114,6 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   moviePosterImage: {
-    // borderBottomRightRadius: 300,
-    // borderBottomLeftRadius: 300,
     width: setWidth(145),
     height: setHeight(35),
   },
